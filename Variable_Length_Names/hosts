@@ -1,0 +1,5 @@
+
+CLIENT_HOSTS="h1x2 h1x3 h1x4 h1x5 h1x6 h1x7 h1x8 h1x9 h4x2 h4x3 h4x4 h4x5 h4x6 h4x7 h4x8 h4x9 "
+SERVER_HOSTS="h3x2 h3x3 h3x4 h3x5 h3x6 h3x7 h3x8 h3x9 h5x2 h5x3 h5x4 h5x5 h5x6 h5x7 h5x8 h5x9 "
+RTR_HOST="h2x2"
+
