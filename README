@@ -44,8 +44,8 @@ Steps:
         git clone https://github.com/WU-ARL/NFD_Performance_Testing_onl_ONL
   7. Try the Variable_Length_Names test. This test is set up to run 
      without sudo access. To run without sudo access you will need this
-     in your onl: ~/.ndn/client.conf file:
-
+     file on ONL: ~/.ndn/client.conf :
+         >  cat ~/.ndn/client.conf 
          unix_socket=/tmp/nfd.sock
          protocol=nrd-0.1
 
