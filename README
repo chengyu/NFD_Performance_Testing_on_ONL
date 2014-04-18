@@ -1,1 +1,15 @@
 Files for running performance tests on nfd.
+
+Key scripts in each test directory:
+ONL_RLI_Files  : The files in this directory need to be copied to your .onldir on the machine
+                 where you will run the ONL RLI
+mkAll.sh       : Use this script to configure your test. You can control the number of traffic client/server pairs, the 
+                 protocol for the faces, the delay interval for ndn-traffic-client, the number of segments in the ndn names
+                 and the length of each segment. This script creates other scripts that will then be used to configure and run
+                 your test.
+cleanAll.sh    : This script removes all the scripts and configuration files that were created by mkAll.sh
+killAll.sh     : This script kills all the processes (nfd, nrd, ndn-traffic-client, ndn-traffic-server) that were run for your test.
+runAll.sh      : This script configures and runs the test.
+hosts	       : This script coincides with the ONL RLI files and defines the hosts in your topology. If you change the topology
+                 in the RLI you might need to change this file as well. This file is used to tell the mkAll.sh script which hosts
+                 are clients, servers and rtr.
