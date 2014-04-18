@@ -50,6 +50,9 @@ Steps:
          protocol=nrd-0.1
 
      This puts the nfd socket file in /tmp instead of the default /var/run/
+
+ALSO: Need to add instructions on setting up key.
+
      Then do this:
 
      > cd NFD_Performance_Testing_on_ONL/Variable_Length_Names
