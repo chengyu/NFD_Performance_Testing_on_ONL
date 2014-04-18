@@ -1,4 +1,4 @@
-Files for running performance tests on nfd.
+Files for running nfd performance tests on ONL.
 
 Key scripts in each test directory:
 ONL_RLI_Files  : The files in this directory need to be copied to your .onldir on 
