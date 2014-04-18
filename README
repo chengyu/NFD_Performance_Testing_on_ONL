@@ -13,3 +13,58 @@ runAll.sh      : This script configures and runs the test.
 hosts	       : This script coincides with the ONL RLI files and defines the hosts in your topology. If you change the topology
                  in the RLI you might need to change this file as well. This file is used to tell the mkAll.sh script which hosts
                  are clients, servers and rtr.
+
+ONL_RLI_Files:
+    HOST2core.shw, PC2core.hw       : These are hardware description files for the pc2core machines used in this topology.
+                                      The pc2core machines are new to ONL and are not built into the RLI yet. When they are
+                                      built into ONL in a future version of the RLI you will no longer need these files.
+    nfd_16_clients_16_servers_1_rtr : This is the topology file that will be loaded into the RLI for your experiment.
+
+Steps:
+  0. Need to learn about ONL or get an account: https://onl.wustl.edu/
+  1. Start the RLI on your laptop (or desktop machine, or...)
+  2. Load the topology file:
+         Go to the File menu and click on Open.
+         Find the nfd_16_clients_16_servers_1_rtr file, click on it and click Open.
+  3. Make a reservation
+         Go to the File menu and click on Make Reservation. 
+  4. Commit
+         The commit operation will take a couple/few minutes.
+         When it says "Commit Completed" at the bottom of the RLI, move on to the next step.
+  5. In a terminal window log in to ONL.
+  6. Retrieve the repo into your ONL home directory:
+        git clone https://github.com/WU-ARL/NFD_Performance_Testing_onl_ONL
+  7. Try the Variable_Length_Names test. This test is set up to run without sudo access.
+       > cd NFD_Performance_Testing_on_ONL/Variable_Length_Names
+       > ./mkAll.sh
+       Usage: ./mkAll.sh <count> <proto> <interval> <num name segments> <segment length>
+       > ./mkAll.sh 16 udp4 10 4 5
+       ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names/rtr ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names
+       mkRtr.sh
+       ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names
+       ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names/client ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names
+       mkClients.sh
+       NAME: /abcde/fghij/klmno/pqrst/
+       ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names
+       ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names/server ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names
+       mkServers.sh
+       ~/NFD/ONL_Installed/NFD_Performance_Testing_on_ONL/Variable_Length_Names
+
+
+       > ./runAll.sh
+
+      This takes a couple of minutes to run and you'll see lots of messages about what it is doing.
+      When you see this:
+
+        runTrafficServers.sh
+        runTrafficClients.sh
+
+      it is done and you should see traffic being displayed in the monitoring windows.
+
+
+  8. When you are ready to stop the experiment:
+      > ./killAll.sh
+
+
+
+
