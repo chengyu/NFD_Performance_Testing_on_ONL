@@ -65,6 +65,10 @@ Steps:
   8. When you are ready to stop the experiment:
       > ./killAll.sh
 
+  9. If you want to clear away the created scripts and log files:
+      > ./cleanAll.sh
+
+  10. Then you can configure another script with different arguments to mkAll.sh if you want.
 
 
 
