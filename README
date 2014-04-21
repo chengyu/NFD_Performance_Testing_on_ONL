@@ -50,22 +50,33 @@ Steps:
          protocol=nrd-0.1
 
      This puts the nfd socket file in /tmp instead of the default /var/run/
+     Running without sudo will cause a couple of errors when starting nfd.
+     Something like these two:
+     1398111630.734668 ERROR: [FaceManager] pcap_activate() failed, continuing
+     1398111630.734820 ERROR: [FaceManager] pcap_activate() failed, continuing
+     
 
-     Set up a key and certificate:
+     Set up a key and certificate. On one of your hosts (NOT onlusr) you will
+     need to run the following:
           # This checks to see if you already have a cert installed.
           > ndnsec-cert-dump -i /`whoami` 
+
+          # If you already have a cert installed, skip this step and
+          # go to the extraction step.
           # If you need to install one, 
           # this installs a cert into your local environment:
           > ndnsec-keygen /`whoami` | ndnsec-install-cert -
+
           # This extracts the cert so you can point to it in configuration 
           # files for nfd and nrd:
           > ndnsec-cert-dump -i /`whoami` >  default.ndncert
+
           # This sets up the file that nrd needs
           > ln -s default.ndncert trust-anchor.cert
 
 
 
-     Then do this:
+     Then do the following on onlusr:
 
      > cd NFD_Performance_Testing_on_ONL/Variable_Length_Names
      > ./mkAll.sh
