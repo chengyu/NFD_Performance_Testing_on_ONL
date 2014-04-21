@@ -55,8 +55,8 @@ Steps:
      1398111630.734668 ERROR: [FaceManager] pcap_activate() failed, continuing
      1398111630.734820 ERROR: [FaceManager] pcap_activate() failed, continuing
      These occur when nfd tries to enable promiscuous mode on the ethernet interface
-     for ethernet faces.
-     
+     for ethernet faces. These are ok for now, we are not currently using
+     ethernet faces on ONL.
 
      Set up a key and certificate. On one of your hosts (NOT onlusr) you will
      need to run the following:
