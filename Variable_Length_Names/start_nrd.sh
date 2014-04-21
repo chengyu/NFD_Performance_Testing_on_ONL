@@ -1,5 +1,5 @@
 #!/bin/bash
 
-nrd >& /tmp/nrd.log &
+nrd --config nrd.conf >& /tmp/nrd.log &
 
 

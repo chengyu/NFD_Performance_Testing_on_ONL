@@ -52,6 +52,16 @@ Steps:
      This puts the nfd socket file in /tmp instead of the default /var/run/
 
 ALSO: Need to add instructions on setting up key.
+          # This checks to see if you already have a cert installed.
+          > ndnsec-cert-dump -i /`whoami` 
+          # If you need to install one, this installs a cert into your local environment:
+          > ndnsec-keygen /`whoami` | ndnsec-install-cert -
+          # This extracts the cert so you can point to it in configuration files for nfd and nrd:
+          > ndnsec-cert-dump -i /`whoami` >  default.ndncert
+          # This sets up the file that nrd needs
+          > ln -s default.ndncert trust-anchor.cert
+
+
 
      Then do this:
 
