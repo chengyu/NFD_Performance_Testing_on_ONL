@@ -42,10 +42,9 @@ Steps:
   5. In a terminal window log in to ONL.
   6. Retrieve the repo into your ONL home directory:
         git clone https://github.com/WU-ARL/NFD_Performance_Testing_onl_ONL
-  7. Try the Variable_Length_Names test. This test is set up to run 
-     without sudo access. To run without sudo access you will need this
-     file on ONL: ~/.ndn/client.conf :
-         >  cat ~/.ndn/client.conf 
+  7. Set up to run without sudo access. You will need your a client.conf
+     file on ONL: ~/.ndn/client.conf  . It should contain the following
+     two lines:
          unix_socket=/tmp/nfd.sock
          protocol=nrd-0.1
 
@@ -58,7 +57,7 @@ Steps:
      for ethernet faces. These are ok for now, we are not currently using
      ethernet faces on ONL.
 
-     Set up a key and certificate. On one of your hosts (NOT onlusr) you will
+  8. Set up a key and certificate. On one of your hosts (NOT onlusr) you will
      need to run the following:
           # This checks to see if you already have a cert installed.
           > ndnsec-cert-dump -i /`whoami` 
@@ -78,14 +77,20 @@ Steps:
 
 
 
-     Then do the following on onlusr:
+  9. Try the Variable_Length_Names test. 
+     Do the following on onlusr:
 
      > cd NFD_Performance_Testing_on_ONL/Variable_Length_Names
+
+     # To see the mkAll.sh Usage message:
      > ./mkAll.sh
      Usage: ./mkAll.sh <count> <proto> <interval> <num name segments> <segment length>
+
+     # configure test with 16 client/server pairs, udp4 faces, 10ms interval between
+     #   interests and NDN names with 4 segments with 5 characters in each segment:
      > ./mkAll.sh 16 udp4 10 4 5
 
-
+     # run the tst
      > ./runAll.sh
 
      This takes a couple of minutes to run and you'll see lots of 
@@ -95,16 +100,17 @@ Steps:
         runTrafficServers.sh
         runTrafficClients.sh
 
-      it is done and you should see traffic being displayed in the monitoring windows.
+      everything should be running and you should see traffic being displayed in 
+      the monitoring windows.
 
 
-  8. When you are ready to stop the experiment:
+  10. When you are ready to stop the experiment:
       > ./killAll.sh
 
-  9. If you want to clear away the created scripts and log files:
+  11. If you want to clear away the created scripts and log files:
       > ./cleanAll.sh
 
-  10. Then you can configure another script with different arguments 
+  12. Then you can configure another script with different arguments 
       to mkAll.sh if you want.
 
 
