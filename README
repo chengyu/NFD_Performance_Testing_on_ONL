@@ -42,7 +42,7 @@ Steps:
          move on to the next step.
   5. In a terminal window log in to ONL.
   6. Retrieve the repo into your ONL home directory:
-        git clone https://github.com/WU-ARL/NFD_Performance_Testing_on_ONL
+        git clone http://github.com/WU-ARL/NFD_Performance_Testing_on_ONL
   7. Set up to run without sudo access. You will need your a client.conf
      file on ONL: ~/.ndn/client.conf  . It should contain the following
      two lines:
