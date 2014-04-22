@@ -14,7 +14,7 @@ if [ -n "$FAILURES" ]
 then
    echo "There were some FAILURES "
    echo "$FAILURES"
-   echo "try again and if it still fails, investigate..."
+   echo "try running $0 again and if it still fails, investigate..."
    exit 0
 else
    echo "zero FAILURES "

@@ -21,9 +21,10 @@ hosts	       : This script coincides with the ONL RLI files and defines the host
 ONL_RLI_Files:
     HOST2core.shw, PC2core.hw  : These are hardware description files for the pc2core 
                                  machines used in this topology. The pc2core machines 
-                                 are new to ONL and are not built into the RLI yet. 
-                                 When they are built into the RLI in a future version,
-                                 you will no longer need these files.
+                                 are new to ONL and are only built into new versions of
+                                 the RLI. If you have version 8.0 or later you do
+                                 not need these files. If you have 7.x or earlier
+                                 you do need them.
     nfd_16_clients_16_servers_1_rtr : This is the topology file that will be loaded 
                                       into the RLI for your experiment.
 
@@ -41,7 +42,7 @@ Steps:
          move on to the next step.
   5. In a terminal window log in to ONL.
   6. Retrieve the repo into your ONL home directory:
-        git clone https://github.com/WU-ARL/NFD_Performance_Testing_onl_ONL
+        git clone https://github.com/WU-ARL/NFD_Performance_Testing_on_ONL
   7. Set up to run without sudo access. You will need your a client.conf
      file on ONL: ~/.ndn/client.conf  . It should contain the following
      two lines:
@@ -59,6 +60,9 @@ Steps:
 
   8. Set up a key and certificate. On one of your hosts (NOT onlusr) you will
      need to run the following:
+          # In the NFD_Performance_Testing_on_ONL/Variable_Length_Names direcotry
+          # do the following.
+
           # This checks to see if you already have a cert installed.
           > ndnsec-cert-dump -i /`whoami` 
 
