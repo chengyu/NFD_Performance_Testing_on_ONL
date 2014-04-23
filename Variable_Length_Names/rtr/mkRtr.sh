@@ -39,7 +39,8 @@ chmod 755 ./configRtr.sh
 # We have to figure out what the first one will be... guess for now
 #START_FACE_ID=7
 #START_FACE_ID=8
-START_FACE_ID=6
+#START_FACE_ID=6
+START_FACE_ID=4
 INDEX=0
 HOSTINDEX=0
 FACE_ID=$START_FACE_ID
