@@ -128,7 +128,7 @@ do
   INDEX=$(($INDEX + 1))
   # add next hop
   #echo "nfdc add-nexthop /example/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/$EXT $FACE_ID 1 " >> ./configRtr.sh
-  echo "nfdc add-nexthop ${NAME}${EXT} $FACE_ID 1 " >> ./configRtr.sh
+  echo "nfdc add-nexthop -c 1 ${NAME}${EXT} $FACE_ID " >> ./configRtr.sh
   FACE_ID=$(($FACE_ID + 2))
   # if we have reached the last server face, go back to first Server face
   if [ $FACE_ID -gt $MAX_FACE_ID ]

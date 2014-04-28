@@ -9,8 +9,5 @@ fi
 
 
 nfdc create ${PROTO}://${RTR_HOST}:6363
-#nfdc add-nexthop /example 8 1
-#nfdc add-nexthop /example 6 1
-#nfdc add-nexthop /example 4 1
-nfdc add-nexthop / 4 1
+nfdc add-nexthop -c 1 / 4 
 
