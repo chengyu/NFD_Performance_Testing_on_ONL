@@ -1,11 +1,6 @@
 #!/bin/bash
 
 
-INTERVAL=1000
-if [ $# -eq 1 ]
-then
-  INTERVAL=$1
-fi
 
 echo "Checking for basic connectivity. This could take a couple minutes..."
 FAILURES=`~onl/bin/pingAllHosts.pl | grep FAIL`
@@ -27,5 +22,11 @@ echo "configAll.sh"
 echo "runTrafficServers.sh"
 ./runTrafficServers.sh 
 echo "runTrafficClients.sh"
-./runTrafficClients.sh $INTERVAL 
+if [ $# -eq 1 ]
+then
+  INTERVAL=$1
+  ./runTrafficClients.sh $INTERVAL 
+else
+  ./runTrafficClients.sh 
+fi
 

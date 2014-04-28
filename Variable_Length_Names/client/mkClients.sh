@@ -36,6 +36,12 @@ echo "#!/bin/bash" > ../runTrafficClients.sh
 chmod 755 ../runTrafficClients.sh
 echo "source ~/.topology" >> ../runTrafficClients.sh
 echo "CWD=\`pwd\`" >> ../runTrafficClients.sh
+echo "INTERVAL=$INTERVAL"   >> ../runTrafficClients.sh
+echo "if [ \$# -eq 1 ]"      >> ../runTrafficClients.sh
+echo "then"                 >> ../runTrafficClients.sh
+echo "  INTERVAL=\$1"        >> ../runTrafficClients.sh
+echo "fi"                   >> ../runTrafficClients.sh
+
 
 ## This creates an array consisting of lower case letters, indexed
 ## from 0
@@ -92,7 +98,7 @@ do
   echo "Name=${NAME}${EXT}" >> $FILENAME
   echo "MustBeFresh=1" >> $FILENAME
   echo "NameAppendSequenceNumber=1" >> $FILENAME
-  echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/client ; ndn-traffic -i $INTERVAL $FILENAME >& client_$EXT.log &\"  " >> ../runTrafficClients.sh
+  echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/client ; ndn-traffic -i \$INTERVAL $FILENAME >& client_$EXT.log &\"  " >> ../runTrafficClients.sh
 
 
   HOSTINDEX=$(($HOSTINDEX + 1))
