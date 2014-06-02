@@ -89,10 +89,22 @@ Steps:
      # To see the mkAll.sh Usage message:
      > ./mkAll.sh
      Usage: ./mkAll.sh <count> <proto> <interval> <num name segments> <segment length>
+     count: Number of client server pairs
+     proto: protocol for the nfd faces
+     interval: time in milliseconds between Interests sent from clients.
+     num name segments: number of segments in the NDN names used
+     segment lengths: number of characters in each name segment.
+     Each name will have a last name segment (000, 001, 002, ...) 
+     that identifies the particular server serving that name space.
 
      # configure test with 16 client/server pairs, udp4 faces, 10ms interval between
      #   interests and NDN names with 4 segments with 5 characters in each segment:
      > ./mkAll.sh 16 udp4 10 4 5
+     # This will run a test with names like this:
+     # /abcde/fghij/klmno/pqrst/000
+     # /abcde/fghij/klmno/pqrst/001
+     # /abcde/fghij/klmno/pqrst/002
+     # ...
 
      # run the tst
      > ./runAll.sh
@@ -105,7 +117,8 @@ Steps:
         runTrafficClients.sh
 
       everything should be running and you should see traffic being displayed in 
-      the monitoring windows.
+      the monitoring windows. The "NFD Pkt Counts" monitoring window will show you
+      how many pkts/sec the NFD router node is able to handle.
 
 
   10. When you are ready to stop the experiment:
@@ -116,6 +129,12 @@ Steps:
 
   12. Then you can configure another script with different arguments 
       to mkAll.sh if you want.
+
+  13. To push the performance of nfd on the router node, you can increase the count of
+      client/server pairs and decrease the interval time.
+      For instance, the following configuration pushes nfd 0.1.0 beyond what it
+      can keep up with:
+      > ./mkAll.sh 64 udp4 5 4 5
 
 
 
