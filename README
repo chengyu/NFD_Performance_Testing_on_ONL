@@ -136,5 +136,19 @@ Steps:
       can keep up with:
       > ./mkAll.sh 64 udp4 5 4 5
 
+  14. The directions so far are for running the installed version of nfd. If you need to
+      run these tests with a local version of nfd  that you have built, you will need to
+      update your PATH to make sure your version of nfd is picked up before /usr/local/bin/nfd.
+      Or you can modify the following script:
+          NFD_Performance_Testing_on_ONL/Variable_Length_Names/start_nfd.sh
+
+      Similar steps can be taken to run your own version of nrd. The script that runs nrd is in:
+          NFD_Performance_Testing_on_ONL/Variable_Length_Names/start_nrd.sh
+
+      To run your own versions of ndn-traffic and ndn-traffic-server is more involved as the start
+      scripts for them are generated via the mkAll.sh script. So, using the PATH method for them
+      would be the best approach.
+
+
 
 
