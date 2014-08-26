@@ -109,7 +109,8 @@ do
 done
 
 # Add a next hop FIB entry for each NAME we are going to generate
-FACE_ID=$START_FACE_ID
+#FACE_ID=$START_FACE_ID
+HOSTINDEX=0
 #echo "START_FACE_ID=$START_FACE_ID MAX_FACE_ID=$MAX_FACE_ID"
 while [ $INDEX -lt $COUNT ]
 do
@@ -128,13 +129,21 @@ do
   INDEX=$(($INDEX + 1))
   # add next hop
   #echo "nfdc add-nexthop /example/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/$EXT $FACE_ID 1 " >> ./configRtr.sh
-  echo "nfdc add-nexthop -c 1 ${NAME}${EXT} $FACE_ID " >> ./configRtr.sh
-  FACE_ID=$(($FACE_ID + 2))
-  # if we have reached the last server face, go back to first Server face
-  if [ $FACE_ID -gt $MAX_FACE_ID ]
+  #echo "nfdc add-nexthop -c 1 ${NAME}${EXT} $FACE_ID " >> ./configRtr.sh
+  echo "nfdc add-nexthop -c 1 ${NAME}${EXT} ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 " >> ./configRtr.sh
+  #FACE_ID=$(($FACE_ID + 2))
+  # if we have reached the last server first Server 
+  HOSTINDEX=$(($HOSTINDEX + 1))
+  if [ $HOSTINDEX -ge $NUM_SERVER_HOSTS ]
   then
     echo " " >> ./configRtr.sh
-    FACE_ID=$START_FACE_ID
+    HOSTINDEX=0
   fi
+  ## if we have reached the last server face, go back to first Server face
+  #if [ $FACE_ID -gt $MAX_FACE_ID ]
+  #then
+  #  echo " " >> ./configRtr.sh
+  #  FACE_ID=$START_FACE_ID
+  #fi
 done
 

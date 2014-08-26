@@ -84,8 +84,8 @@ do
   #echo "Name=/example/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/$EXT" > $FILENAME
   echo "Name=${NAME}${EXT}" >> $FILENAME
   echo "ContentType=1" >> $FILENAME
-  #echo "ContentBytes=10" >> $FILENAME
-  echo "Content=AAAAAAAAAA" >> $FILENAME
+  echo "ContentBytes=1000" >> $FILENAME
+  #echo  "Content=AAAAAAAAAA" >> $FILENAME
 
 
   #echo " ssh \$${HOST_LIST[$HOSTINDEX]}  \"cd \$CWD/server ; ndn-traffic-server -q $FILENAME >& server_$EXT.log &\"  " >> ../runTrafficServers.sh
