@@ -4,10 +4,10 @@ if [ $# -eq 4 ]
 then
   COUNT=$1
   PROTO=$2
-  NUM_SEGMENTS=$3
-  SEGMENT_LEN=$4
+  NUM_COMPONENTS=$3
+  COMPONENT_LEN=$4
 else
-  echo "Usage: $0 <count> <proto> <num name segments> <segment length>"
+  echo "Usage: $0 <count> <proto> <num name components> <component length>"
   exit 0
 fi
 
@@ -48,10 +48,10 @@ ALPHA_LIST=(a b c d e f g h i j k l m n o p q r s t u v w x y z)
 k=0
 i=0
 NAME="/"
-while [ $i -lt $NUM_SEGMENTS ]
+while [ $i -lt $NUM_COMPONENTS ]
 do
   j=0
-  while [ $j -lt $SEGMENT_LEN ]
+  while [ $j -lt $COMPONENT_LEN ]
   do
     NAME="$NAME""${ALPHA_LIST[$k]}"
     j=$(($j+1))
@@ -84,7 +84,8 @@ do
   #echo "Name=/example/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/$EXT" > $FILENAME
   echo "Name=${NAME}${EXT}" >> $FILENAME
   echo "ContentType=1" >> $FILENAME
-  echo "ContentBytes=1000" >> $FILENAME
+  echo "ContentBytes=800" >> $FILENAME
+  #echo "ContentBytes=4000" >> $FILENAME
   #echo  "Content=AAAAAAAAAA" >> $FILENAME
 
 
