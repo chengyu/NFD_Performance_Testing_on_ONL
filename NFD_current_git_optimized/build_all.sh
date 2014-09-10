@@ -17,6 +17,12 @@ do
     then
       CLEAN="TRUE"
       shift
+    else
+      if [ "$1" = "--profile" ]
+      then
+        export CXXFLAGS="$CXXFLAGS -O2 -pg -g"
+        shift
+      fi
     fi
   fi
 done
