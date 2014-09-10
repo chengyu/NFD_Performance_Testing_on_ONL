@@ -21,7 +21,7 @@ nrd_ready()
 
 
 count=0
-../NFD_current_git_optimized/usr/local/bin/nrd --config nfd.conf >& /tmp/nrd.log &
+../NFD_current_git/usr/local/bin/nrd --config nfd.conf >& /tmp/nrd.log &
 
 while true
 do
