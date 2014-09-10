@@ -21,7 +21,7 @@ nfd_ready()
 
 
 count=0
-/users/jdd/NFD/NFD_current_git_optimized/NFD/build/bin/nfd --config nfd.conf >& /tmp/nfd.log &
+../NFD_current_git_optimized/usr/local/bin/nfd --config nfd.conf >& /tmp/nfd.log &
 
 while true
 do
