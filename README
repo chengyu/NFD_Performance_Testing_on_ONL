@@ -1,3 +1,7 @@
+(New steps for building and running a local version of nfd and nrd can
+ be found at the bottom of this file.)
+
+
 Files for running nfd performance tests on ONL.
 
 Key scripts in each test directory:
@@ -150,5 +154,75 @@ Steps:
       would be the best approach.
 
 
+
+-------------------------------------------------------------------------
+Building and running a local version of nfd and nrd
+
+On onlusr:
+
+onlusr> cd ~
+onlusr> git clone http://github.com/WU-ARL/NFD_Performance_Testing_on_ONL
+onlusr> cd NFD_Performance_Testing_on_ONL/
+onlusr> cd NFD_current_git/
+onlusr> ./git_initial.sh
+
+
+On a pc2core:
+
+pc2core19> cd ~
+pc2core19> cd NFD_Performance_Testing_on_ONL/NFD_current_git/
+pc2core19> ./build_all.sh
+
+
+On onlusr:
+onlusr> cd ~
+onlusr> cd NFD_Performance_Testing_on_ONL/Variable_Length_Names/
+
+onlusr>  ./mkAll.sh
+Usage: ./mkAll.sh [options] <count> <proto> <interval> <num name components> <component length>
+Options:
+  [--local]     - use start scripts to run local (../NFD_current_git_optimized/usr/local/bin/) versions of nfd and nrd
+  [--installed] - use start scripts to run the installed (based on PATH) versions of nfd and nrd
+
+
+onlusr> ./mkAll.sh --local  64 udp4 8 5 5
+onlusr> ./runAll.sh
+
+< run as long as you need, and then:>
+
+onlusr> ./killAll.sh
+
+
+
+-------------------------------------------------------------------------
+Building and running a local profiled version of nfd and nrd
+
+Assuming you already have the NFD_Performance_Testing_on_ONL repo
+
+On a pc2core:
+
+pc2core19> cd ~
+pc2core19> cd NFD_Performance_Testing_on_ONL/NFD_current_git/
+pc2core19> ./build_all.sh --profile
+
+On onlusr:
+onlusr> cd ~
+onlusr> cd NFD_Performance_Testing_on_ONL/Variable_Length_Names/
+
+onlusr>  ./mkAll.sh
+Usage: ./mkAll.sh [options] <count> <proto> <interval> <num name components> <component length>
+Options:
+  [--local]     - use start scripts to run local (../NFD_current_git_optimized/usr/local/bin/) versions of nfd and nrd
+  [--installed] - use start scripts to run the installed (based on PATH) versions of nfd and nrd
+
+
+onlusr> ./mkAll.sh --local  64 udp4 8 5 5
+onlusr> ./runAll.sh
+
+< run as long as you need, and then:>
+
+onlusr> ./killAll.sh
+
+onlusr> gprof ../NFD_current_git/usr/local/bin/nfd gmon.out >& gprof.out
 
 
