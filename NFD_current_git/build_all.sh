@@ -3,25 +3,33 @@
 DIRS0="ndn-cxx "
 DIRS1="NFD "
 DIRS2="ndn-traffic-generator "
-FLAGS=""
+CONFIGURE_FLAGS=""
+BUILD_FLAGS=""
 CLEAN="FALSE"
 
 while [ $# -ge 1 ]
 do
-  if [ "$1" = "--debug" ]
+  if [ "$1" = "-v" ]
   then
-    FLAGS="--debug"
+    BUILD_FLAGS="$BUILD_FLAGS -v"
     shift
   else
-    if [ "$1" = "--clean" ]
+    if [ "$1" = "--debug" ]
     then
-      CLEAN="TRUE"
+      CONFIGURE_FLAGS="$CONFIGURE_FLAGS --debug"
       shift
     else
-      if [ "$1" = "--profile" ]
+      if [ "$1" = "--clean" ]
       then
-        export CXXFLAGS="$CXXFLAGS -O2 -pg -g"
+        CLEAN="TRUE"
         shift
+      else
+        if [ "$1" = "--profile" ]
+        then
+          export CXXFLAGS="$CXXFLAGS -O2 -pg -g"
+          export LINKFLAGS="$LINKFLAGS -pg "
+          shift
+        fi
       fi
     fi
   fi
@@ -40,9 +48,9 @@ do
   then
     ./waf clean
   fi
-  ./waf --prefix ${CWD}/usr/local configure
-  ./waf --prefix ${CWD}/usr/local
-  ./waf --prefix ${CWD}/usr/local install
+  ./waf $CONFIGURE_FLAGS --prefix ${CWD}/usr/local configure
+  ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local
+  ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local install
   popd
 done 
 for d in $DIRS1 
@@ -53,9 +61,9 @@ do
   then
     ./waf clean
   fi
-  ./waf --with-tests $FLAGS --without-websocket --prefix ${CWD}/usr/local configure
-  ./waf $FLAGS --prefix ${CWD}/usr/local
-  ./waf $FLAGS --prefix ${CWD}/usr/local install
+  ./waf --with-tests $CONFIGURE_FLAGS --without-websocket --prefix ${CWD}/usr/local configure
+  ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local
+  ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local install
   popd
 done 
 
