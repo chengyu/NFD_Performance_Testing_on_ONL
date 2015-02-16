@@ -11,7 +11,7 @@ nrd_ready()
   fi
 
   RIB=`echo $RIB_INFO | cut -d':' -f 1`
-  if [ "$RIB" = "Rib" ]
+  if [ "$RIB" = "RIB" ]
   then
       echo "READY"
   else
