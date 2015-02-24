@@ -4,7 +4,7 @@
 
 Files for running nfd performance tests on ONL.
 
-2/24/2015: Updated to run with nfd version 0.3.0 (commit it: 0.3.0-19-g73b909a)
+2/24/2015: Updated to run with nfd version 0.3.0 (commit id: 0.3.0-19-g73b909a)
            This new version incorporates the nrd into a thread in the nfd process.
            So, it is no longer necessary to start a separate nrd process.
 
