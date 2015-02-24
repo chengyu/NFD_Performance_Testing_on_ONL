@@ -2,7 +2,7 @@
 
 # default is to run installed nfd and nrd
 cp -p start_nfd.sh.INSTALLED start_nfd.sh
-cp -p start_nrd.sh.INSTALLED start_nrd.sh
+#cp -p start_nrd.sh.INSTALLED start_nrd.sh
 
 while [ $# -gt 5 ]
 do
@@ -10,13 +10,13 @@ do
   if [ "$1" = "--local" ]
   then
     cp -p start_nfd.sh.LOCAL start_nfd.sh
-    cp -p start_nrd.sh.LOCAL start_nrd.sh
+    #cp -p start_nrd.sh.LOCAL start_nrd.sh
     shift
   else
     if [ "$1" = "--installed" ]
     then
       cp -p start_nfd.sh.INSTALLED start_nfd.sh
-      cp -p start_nrd.sh.INSTALLED start_nrd.sh
+      #cp -p start_nrd.sh.INSTALLED start_nrd.sh
       shift
     fi
   fi

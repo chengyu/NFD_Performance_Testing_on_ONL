@@ -4,6 +4,10 @@
 
 Files for running nfd performance tests on ONL.
 
+2/24/2015: Updated to run with nfd version 0.3.0 (commit it: 0.3.0-19-g73b909a)
+           This new version incorporates the nrd into a thread in the nfd process.
+           So, it is no longer necessary to start a separate nrd process.
+
 Key scripts in each test directory:
 ONL_RLI_Files  : The files in this directory need to be copied to your .onldir on 
                  the machine where you will run the ONL RLI
@@ -146,8 +150,8 @@ Steps:
       Or you can modify the following script:
           NFD_Performance_Testing_on_ONL/Variable_Length_Names/start_nfd.sh
 
-      Similar steps can be taken to run your own version of nrd. The script that runs nrd is in:
-          NFD_Performance_Testing_on_ONL/Variable_Length_Names/start_nrd.sh
+      Similar steps can be taken to run your own version of nrd (if needed). The script that 
+          runs nrd is in: NFD_Performance_Testing_on_ONL/Variable_Length_Names/start_nrd.sh
 
       To run your own versions of ndn-traffic and ndn-traffic-server is more involved as the start
       scripts for them are generated via the mkAll.sh script. So, using the PATH method for them
