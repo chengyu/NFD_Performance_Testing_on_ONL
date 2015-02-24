@@ -1,7 +1,6 @@
 (New steps for building and running a local version of nfd and nrd can
  be found at the bottom of this file.)
 
-
 Files for running nfd performance tests on ONL.
 
 2/24/2015: Updated to run with nfd version 0.3.0 (commit id: 0.3.0-19-g73b909a)
