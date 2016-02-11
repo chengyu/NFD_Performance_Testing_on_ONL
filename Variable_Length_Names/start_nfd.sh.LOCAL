@@ -21,6 +21,8 @@ nfd_ready()
 
 
 count=0
+CWD=`pwd`
+export LD_LIBRARY_PATH="$CWD/../NFD_current_git/usr/local/lib:$LD_LIBRARY_PATH"
 ../NFD_current_git/usr/local/bin/nfd --config nfd.conf >& /tmp/nfd.log &
 
 while true
