@@ -53,6 +53,12 @@ Steps:
   7. Set up to run without sudo access. You will need a client.conf
      file on ONL: ~/.ndn/client.conf . It should contain the following
      two lines:
+
+     (For nfd 0.4.0 and later)
+         transport=unix:///tmp/nfd.sock
+         protocol=nrd-0.1
+
+     (For nfd 0.4.0 and later)
          unix_socket=/tmp/nfd.sock
          protocol=nrd-0.1
 
