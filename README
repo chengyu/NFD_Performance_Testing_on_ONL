@@ -58,7 +58,7 @@ Steps:
          transport=unix:///tmp/nfd.sock
          protocol=nrd-0.1
 
-     (For nfd 0.4.0 and later)
+     (For nfd earlier versions of nfd)
          unix_socket=/tmp/nfd.sock
          protocol=nrd-0.1
 
