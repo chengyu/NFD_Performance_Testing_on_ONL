@@ -26,8 +26,10 @@ do
       else
         if [ "$1" = "--profile" ]
         then
-          export CXXFLAGS="$CXXFLAGS -O2 -pg -g"
+          echo "before CXXFLAGS = $CXXFLAGS"
+          export CXXFLAGS="$CXXFLAGS -O2 -pg -g -std=c++0x -pedantic -Wall"
           export LINKFLAGS="$LINKFLAGS -pg "
+          echo "after CXXFLAGS = $CXXFLAGS"
           shift
         fi
       fi
@@ -76,6 +78,7 @@ do
     ./waf clean
   fi
   ./waf --prefix ${CWD}/usr/local configure
+  #./waf --prefix ${CWD}/usr/local configure
   ./waf --prefix ${CWD}/usr/local
   ./waf --prefix ${CWD}/usr/local install
   popd
