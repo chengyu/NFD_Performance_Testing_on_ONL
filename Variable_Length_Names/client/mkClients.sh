@@ -7,8 +7,9 @@ then
   INTERVAL=$3
   NUM_COMPONENTS=$4
   COMPONENT_LEN=$5
+  INTEREST_NUM=$6
 else
-  echo "Usage: $0 <count> <proto> <interval> <num name components> <component length>"
+  echo "Usage: $0 <count> <proto> <interval> <num name components> <component length> <interest num>"
   exit 0
 fi
 
@@ -98,7 +99,8 @@ do
   echo "Name=${NAME}${EXT}" >> $FILENAME
   echo "MustBeFresh=1" >> $FILENAME
   echo "NameAppendSequenceNumber=1" >> $FILENAME
-  echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/client ; ndn-traffic -i \$INTERVAL $FILENAME >& client_$EXT.log &\"  " >> ../runTrafficClients.sh
+  #echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/client ; ndn-traffic -i \$INTERVAL $FILENAME >& client_$EXT.log &\"  " >> ../runTrafficClients.sh
+  echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/client ; export LD_LIBRARY_PATH='\$CWD/../NFD_current_git/usr/local/lib:\$LD_LIBRARY_PATH\' ; ../../NFD_current_git/usr/local/bin/ndn-traffic -i \$INTERVAL -c $INTEREST_NUM $FILENAME >& client_$EXT.log &\"  " >> ../runTrafficClients.sh
 
 
   HOSTINDEX=$(($HOSTINDEX + 1))
