@@ -1,9 +1,11 @@
+This repo is forked from John's repo. I modified it to support the tests for various content payload size
+
 (New steps for building and running a local version of nfd and nrd can
  be found at the bottom of this file.)
 
 Files for running nfd performance tests on ONL.
 
-2/24/2015: Updated to run with nfd version 0.3.0 (commit id: 0.3.0-19-g73b909a)
+3/8/2016: Updated to run with nfd version 0.4.0 and accept pkt size and number of Interests allowed to send on client side
            This new version incorporates the nrd into a thread in the nfd process.
            So, it is no longer necessary to start a separate nrd process.
 
@@ -101,18 +103,20 @@ Steps:
 
      # To see the mkAll.sh Usage message:
      > ./mkAll.sh
-     Usage: ./mkAll.sh <count> <proto> <interval> <num name segments> <segment length>
+     Usage: ./mkAll.sh [Interest num] <count> <proto> <interval> <num name segments> <segment length> <content payload size>
+     Interest num: the #Interests that client will send
      count: Number of client server pairs
      proto: protocol for the nfd faces
      interval: time in milliseconds between Interests sent from clients.
      num name segments: number of segments in the NDN names used
      segment lengths: number of characters in each name segment.
+     content payload size: the size of the NDN content, in Bytes
      Each name will have a last name segment (000, 001, 002, ...) 
      that identifies the particular server serving that name space.
 
      # configure test with 16 client/server pairs, udp4 faces, 10ms interval between
      #   interests and NDN names with 4 segments with 5 characters in each segment:
-     > ./mkAll.sh 16 udp4 10 4 5
+     > ./mkAll.sh 16 udp4 10 4 5 100
      # This will run a test with names like this:
      # /abcde/fghij/klmno/pqrst/000
      # /abcde/fghij/klmno/pqrst/001
@@ -147,7 +151,7 @@ Steps:
       client/server pairs and decrease the interval time.
       For instance, the following configuration pushes nfd 0.1.0 beyond what it
       can keep up with:
-      > ./mkAll.sh 64 udp4 5 4 5
+      > ./mkAll.sh 64 udp4 5 4 5 100
 
   14. The directions so far are for running the installed version of nfd. If you need to
       run these tests with a local version of nfd  that you have built, you will need to
@@ -188,13 +192,13 @@ onlusr> cd ~
 onlusr> cd NFD_Performance_Testing_on_ONL/Variable_Length_Names/
 
 onlusr>  ./mkAll.sh
-Usage: ./mkAll.sh [options] <count> <proto> <interval> <num name components> <component length>
+Usage: ./mkAll.sh [options] [Interest num] <count> <proto> <interval> <num name components> <component length> <content payload>
 Options:
   [--local]     - use start scripts to run local (../NFD_current_git_optimized/usr/local/bin/) versions of nfd and nrd
   [--installed] - use start scripts to run the installed (based on PATH) versions of nfd and nrd
 
 
-onlusr> ./mkAll.sh --local  64 udp4 8 5 5
+onlusr> ./mkAll.sh --local  64 udp4 8 5 5 100
 onlusr> ./runAll.sh
 
 < run as long as you need, and then:>
@@ -219,13 +223,14 @@ onlusr> cd ~
 onlusr> cd NFD_Performance_Testing_on_ONL/Variable_Length_Names/
 
 onlusr>  ./mkAll.sh
-Usage: ./mkAll.sh [options] <count> <proto> <interval> <num name components> <component length>
+Usage: ./mkAll.sh [options] [Interest num] <count> <proto> <interval> <num name components> <component length> <content payload>
 Options:
   [--local]     - use start scripts to run local (../NFD_current_git_optimized/usr/local/bin/) versions of nfd and nrd
   [--installed] - use start scripts to run the installed (based on PATH) versions of nfd and nrd
 
 
-onlusr> ./mkAll.sh --local  64 udp4 8 5 5
+onlusr> ./mkAll.sh --local  64 udp4 8 5 5 100
+or ... onlusr> ./mkAll.sh --local  1500 64 udp4 8 5 5 100
 onlusr> ./runAll.sh
 
 < run as long as you need, and then:>
