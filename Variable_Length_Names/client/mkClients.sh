@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $# -eq 5 ]
+if [ $# -eq 6 ]
 then
   COUNT=$1
   PROTO=$2
@@ -9,8 +9,17 @@ then
   COMPONENT_LEN=$5
   INTEREST_NUM=$6
 else
-  echo "Usage: $0 <count> <proto> <interval> <num name components> <component length> <interest num>"
+  if [ $# -eq 5 ]
+  then
+    COUNT=$1
+    PROTO=$2
+    INTERVAL=$3
+    NUM_COMPONENTS=$4
+    COMPONENT_LEN=$5
+  else
+    echo "Usage: $0 <count> <proto> <interval> <num name components> <component length> [interest num]"
   exit 0
+  fi
 fi
 
 source ../hosts

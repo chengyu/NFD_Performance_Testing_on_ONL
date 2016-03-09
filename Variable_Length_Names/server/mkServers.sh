@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $# -eq 4 ]
+if [ $# -eq 5 ]
 then
   COUNT=$1
   PROTO=$2
