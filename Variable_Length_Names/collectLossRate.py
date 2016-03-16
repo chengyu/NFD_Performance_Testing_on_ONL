@@ -36,5 +36,6 @@ totalDataRecv = 0
 for i, val in enumerate(cltRes):
     totalIntSent += float(val[0])
     totalDataRecv += float(val[1])
+print "totalIntSent = %s" % totalIntSent, "totalDataRecv = %s" % totalDataRecv
+print "loss rate (percentage) = %s" % ((totalIntSent - totalDataRecv)/totalIntSent * 100)
 
-print "loss rate (%):", (totalIntSent - totalDataRecv)/totalIntSent * 100
