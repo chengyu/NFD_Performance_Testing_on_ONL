@@ -86,6 +86,7 @@ do
   echo "Name=${NAME}${EXT}" >> $FILENAME
   echo "ContentType=1" >> $FILENAME
   echo "ContentBytes=${CONTENT_PAYLOAD}" >> $FILENAME
+  echo "SigningInfo=id:/localhost/identity/digest-sha256" >> $FILENAME
   #echo "ContentBytes=4000" >> $FILENAME
   #echo  "Content=AAAAAAAAAA" >> $FILENAME
 
