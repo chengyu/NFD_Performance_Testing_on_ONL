@@ -68,6 +68,7 @@ class GprofParser():
         self.functions = {}
         self.cycles = {}
         self.threshold = None
+        self.depth = None
         self.show_name = show_name
 
     def readline(self):
@@ -276,104 +277,132 @@ class GprofParser():
         return False
 
     def isParentOfNfdModule(self, func):
-        nextFunc = [func]
+        nextFunc = [(func, [])]
         while (len(nextFunc) != 0):
-            index = nextFunc.pop()
+            (index, visited) = nextFunc.pop()
+            # call self, ignore
             if not index in self.functions:
                 return False
+            # contain any nfd functions, return true
             if "nfd" in self.functions[index].name:
                 return True
+
             for childFunc in self.functions[index].children:
                 if not childFunc.index in self.functions:
                     continue
-                child = self.functions[childFunc.index]
                 # break the cycle (A->B->C-A), but loss some details
-                if child.cycle == None and child.called_self == None:
-                    nextFunc.append(child.index)
+                # if childFunc has been visited, ignore
+                if childFunc.index in visited:
+                    continue
+                child = self.functions[childFunc.index]
+                # one cannot be its own parent
+                if child.called_self != None:
+                    continue
+                visited.append(index)
+                nextFunc.append((child.index, visited))
         return False
 
 
-    def expandFunctionsWithInclusiveTime(self):
+    def expandFunctionsWithInclusiveTime(self, entryFunc):
         # function entry example:
         #(1387, {'index': 1387, 'name': '__tcf_0', 'descendants': 0.0, 'self': 0.0, 'percentage_time': 0.0, 'children': [], 'parents': [{'called_total': 1, 'index': 1180, 'name': 'nfd::rib::RibStatusPublisher::RibStatusPublisher(nfd::rib::Rib const&, ndn::Face&, ndn::Name const&, ndn::security::KeyChain&)', 'descendants': 0.0, 'self': 0.0, 'called': 1, 'cycle': None}], 'cycle': None, 'called': 1, 'called_self': None})
-        sortedIndex = sorted(self.functions)
-        
-        # use list as stack
-        toBeVisited = []
 
-        # ignore the nfd::NfdRunner::run() and nfd::NfdRunner::run()::{lambda()#1}::operator()() const for now
-        # because they split the percentage time boost::asio::detail::task_io_service::run(boost::system::error_code&)
+        # list as stack. Tranverse this stack makes a queue, so later we can update
+        # the queue to format the tree-like print out messages
+        visitStack = []
 
-        # tranverse the graph without cycles
-        # tuple members: (index, called, depth, list for which level contains a "|")
-        toBeVisited.append((sortedIndex[0], self.functions[sortedIndex[0]].called, 0, []))
+        # choose the entry function to start print
+        for index in self.functions:
+            if (self.functions[index].name == entryFunc):
+                # tuple members: (index, called, depth, list for which level contains a "|", list of visited node on this path -- break cycles)
+                visitStack.append((index, self.functions[index].called, 0, [], [index]))
+                break
 
-        # use a queue to save the nodes orderly, since we can save the index to add "|"
-        visitOrder = deque()
+         # use a queue to save the nodes orderly, since we can save the index to add "|"
+        visitQueue = deque()
 
-        #called_self = []
-        while (len(toBeVisited) != 0):
-            tmp = toBeVisited.pop()
-            (curFuncIndex, called, depth, sep_list) = tmp
+        while (len(visitStack) != 0):
+            tmp = visitStack.pop()
+            (curFuncIndex, called, depth, sep_list, visited_list) = tmp
 
             # if the index is not in the function dict, ignore
             if not curFuncIndex in self.functions.keys():
                 continue
             curFunc = self.functions[curFuncIndex]
 
+            # exclude confusing functions
             if curFunc.name.startswith("_GLOBAL__sub_I__ZN3"):
                 continue
 
-            percentage_time = curFunc.percentage_time * (called/curFunc.called)
+            # percentage time is a portion of the caller
+            # how about if the caller is not called by anyone?
+            percentage_time = 0.0
+
+            #print curFuncIndex, curFunc.parents, called, curFunc.called
+            # no parents
+            if len(curFunc.parents) != 0:
+                percentage_time = curFunc.percentage_time * (called/curFunc.called)
+            else:
+                percentage_time = curFunc.percentage_time
 
             # ignore function and its children whose percentage_time is smaller than threshold
             if self.threshold != None and percentage_time < self.threshold:
                 continue
 
             # every time, before add an item, update the previous items till the same level
-            for item in reversed(visitOrder):
+            for item in reversed(visitQueue):
                  if item[2] <= depth:
                      break
                  if not depth in item[3]:
                     # item[3] is the index that needs a '|'
                     item[3].append(depth)
 
-            visitOrder.append(tmp)
+            # visited_list excludes the cycles, but the queue only saves the nodes that do not form a cycle
+            visitQueue.append((curFuncIndex, called, depth, sep_list))
 
             children = sorted(curFunc.children, key = lambda x: x.index, reverse=True)
             for childFunc in children:
+                tmp_visited_list = list(visited_list)
+                #print "1", curFuncIndex, tmp_visited_list, childFunc.index
                 if not childFunc.index in self.functions:
                     continue
 
-                # do not add self calls
-                if self.functions[childFunc.index].called_self != None:
-                    #if not childFunc.index in called_self:
-                    #    called_self.append(childFunc.index)
+                # if the childFunc has been visited, ignore
+                if childFunc.index in tmp_visited_list:
                     continue
+
+                #print "2", curFuncIndex, tmp_visited_list, childFunc.index
 
                 # assuming that function name without "nfd" will not call nfd functions except that its child function contains it
                 if not "nfd" in childFunc.name and not self.isParentOfNfdModule(childFunc.index):
                     continue
                 else:
-                    propagated_calls = childFunc.called * (called/curFunc.called)
+                    propagated_calls = 0.0
+                    if len(curFunc.parents) != 0:
+                        propagated_calls = childFunc.called * (called/curFunc.called)
+                    else:
+                        propagated_calls = childFunc.called
 
-                    toBeVisited.append((childFunc.index, propagated_calls, depth + 1, []))
+                    tmp_visited_list.append(childFunc.index)
+                    #print "3", curFuncIndex, tmp_visited_list, childFunc.index
 
-        #print "\ncalled_self:", called_self
-        #for item in called_self:
-        #    print self.functions[item].percentage_time, self.functions[item].name, "[%s]"%item
-        #print "\n"
+                    # ignore functions whose depth is bigger than the size of visited_list
+                    print self.depth, visited_list, len(visited_list)
+                    if self.depth == None or (self.depth > len(visited_list)):
+                        visitStack.append((childFunc.index, propagated_calls, depth + 1, [], tmp_visited_list))
 
         print "\nThe tree below lists functions, it does not go deeper when it touches a cycle\n"
-        print "Note that each entry contains 3 components 'percentage_time', 'function_name', 'fucntion index in the original gprof file'\n\n"
-        while (len(visitOrder) != 0):
-            (index, calls, depth, sep_list) = visitOrder.popleft()
+        print "Each entry contains 3 components 'percentage_time', 'function_name', 'fucntion index in the original gprof file'"
+        print "Note that if a function does not contain the total called number in 'called' column, the percentage_time is not the propagated percentage_time\n\n"
+
+        while (len(visitQueue) != 0):
+            (index, calls, depth, sep_list) = visitQueue.popleft()
 
             if not index in self.functions.keys():
                 continue
             curFunc = self.functions[index]
 
-            # visitOrder should contains all functions(except the self-called function) in the call graph
+            # visitQueue should contains all functions(except the self-called function) in the call graph
             lvlStr = list()
 
             if depth > 0:
@@ -383,14 +412,18 @@ class GprofParser():
                 for i in sep_list:
                     lvlStr[(i - 1)*2] = '|'
             funcStr = ""
-            percentage_time = curFunc.percentage_time * (calls/curFunc.called)
+            percentage_time = 0.0
+            if len(curFunc.parents) != 0:
+                percentage_time = curFunc.percentage_time * (calls/curFunc.called)
+            else:
+                percentage_time = curFunc.percentage_time
 
             if depth > 0:
                 lvlStr.append("|-")
-            
+
             nextOne = -1
-            if len(visitOrder) > 0:
-                (nextOne, a, b, c) = visitOrder[0]
+            if len(visitQueue) > 0:
+                (nextOne, a, b, c) = visitQueue[0]
 
             if nextOne != -1 and self.isChild(index, nextOne):
                 funcStr = "".join(lvlStr) + "+ "
@@ -407,14 +440,26 @@ class GprofParser():
             funcStr.strip()
             print funcStr
 
+
     def setThreshold(self, threshold):
         self.threshold = threshold
+            
+    def setDepth(self, depth):
+        self.depth = depth
             
     def parse(self):
         self.parse_cg()
         self.fp.close()
-        self.expandFunctionsWithInclusiveTime()
-        #print self.functions[165], "\n"
+        # every spontaneous function is used as an entry function
+        #self.expandFunctionsWithInclusiveTime("boost::asio::detail::task_io_service::run(boost::system::error_code&)")
+        #print self.functions[12],"\n"
+        for index in self.functions:
+            if (len(self.functions[index].parents) == 0 and self.functions[index].percentage_time > 2.0):
+                self.expandFunctionsWithInclusiveTime(self.functions[index].name)
+                separator = "\n"
+                for i in range(50): separator += "="
+                separator += "\n"
+                print separator
 
 def main():
     """Main program."""
@@ -432,6 +477,11 @@ def main():
         help="ignore functions whose percentage time is below the threshold")
 
     optparser.add_option(
+        '-d', '--depth', metavar='depth of function',
+        type="int", dest="depth",
+        help="ignore functions whose depth is bigger than depth")
+
+    optparser.add_option(
         "-n", action="store_false", dest="show_name",
         default=True, help="disable function name")
 
@@ -447,6 +497,9 @@ def main():
 
     if not options.threshold is None:
         parser.setThreshold(options.threshold)
+
+    if not options.depth is None:
+        parser.setDepth(options.depth)
 
     parser.parse()
 
