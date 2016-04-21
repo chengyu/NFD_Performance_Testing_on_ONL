@@ -387,7 +387,7 @@ class GprofParser():
                     #print "3", curFuncIndex, tmp_visited_list, childFunc.index
 
                     # ignore functions whose depth is bigger than the size of visited_list
-                    print self.depth, visited_list, len(visited_list)
+                    #print self.depth, visited_list, len(visited_list)
                     if self.depth == None or (self.depth > len(visited_list)):
                         visitStack.append((childFunc.index, propagated_calls, depth + 1, [], tmp_visited_list))
 
