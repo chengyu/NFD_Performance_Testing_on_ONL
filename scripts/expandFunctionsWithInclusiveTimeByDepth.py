@@ -69,6 +69,7 @@ class GprofParser():
         self.cycles = {}
         self.threshold = None
         self.depth = None
+        self.entry = None
         self.show_name = show_name
 
     def readline(self):
@@ -393,7 +394,7 @@ class GprofParser():
 
         print "\nThe tree below lists functions, it does not go deeper when it touches a cycle\n"
         print "Each entry contains 3 components 'percentage_time', 'function_name', 'fucntion index in the original gprof file'"
-        print "Note that if a function does not contain the total called number in 'called' column, the percentage_time is not the propagated percentage_time\n\n"
+        print "Note that if a function does not contain the total called number in 'called' column, the percentage_time is its own percentage_time\n\n"
 
         while (len(visitQueue) != 0):
             (index, calls, depth, sep_list) = visitQueue.popleft()
@@ -447,19 +448,26 @@ class GprofParser():
     def setDepth(self, depth):
         self.depth = depth
             
+    def setEntry(self, entry):
+        self.entry = entry
+            
     def parse(self):
         self.parse_cg()
         self.fp.close()
-        # every spontaneous function is used as an entry function
-        #self.expandFunctionsWithInclusiveTime("boost::asio::detail::task_io_service::run(boost::system::error_code&)")
-        #print self.functions[12],"\n"
-        for index in self.functions:
-            if (len(self.functions[index].parents) == 0 and self.functions[index].percentage_time > 2.0):
-                self.expandFunctionsWithInclusiveTime(self.functions[index].name)
-                separator = "\n"
-                for i in range(50): separator += "="
-                separator += "\n"
-                print separator
+        if self.entry == None:
+            print "all"
+            # every spontaneous function is used as an entry function
+            for index in self.functions:
+                if (len(self.functions[index].parents) == 0):
+                    self.expandFunctionsWithInclusiveTime(self.functions[index].name)
+                    separator = "\n"
+                    for i in range(50): separator += "="
+                    separator += "\n"
+                    print separator
+        else:
+            print "starts", self.functions[self.entry].name
+            self.expandFunctionsWithInclusiveTime(self.functions[self.entry].name)
+            
 
 def main():
     """Main program."""
@@ -482,6 +490,11 @@ def main():
         help="ignore functions whose depth is bigger than depth")
 
     optparser.add_option(
+        '-e', '--entry-function', metavar='id of the entry function',
+        type="int", dest="entry",
+        help="set the entry function's id")
+
+    optparser.add_option(
         "-n", action="store_false", dest="show_name",
         default=True, help="disable function name")
 
@@ -500,6 +513,9 @@ def main():
 
     if not options.depth is None:
         parser.setDepth(options.depth)
+
+    if not options.entry is None:
+        parser.setEntry(options.entry)
 
     parser.parse()
 
