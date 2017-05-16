@@ -1,85 +1,104 @@
 #!/bin/bash
 
-DIRS0="ndn-cxx "
-DIRS1="NFD "
-DIRS2="ndn-traffic-generator "
-CONFIGURE_FLAGS=""
+DIRS0="ndn-cxx"
+DIRS1="NFD"
+DIRS2="ndn-traffic-generator"
 BUILD_FLAGS=""
 CLEAN="FALSE"
 
-while [ $# -ge 1 ]
-do
-  if [ "$1" = "-v" ]
-  then
-    BUILD_FLAGS="$BUILD_FLAGS -v"
-    shift
-  else
-    if [ "$1" = "--debug" ]
-    then
-      CONFIGURE_FLAGS="$CONFIGURE_FLAGS --debug"
-      shift
-    else
-      if [ "$1" = "--clean" ]
-      then
-        CLEAN="TRUE"
-        shift
-      else
-        if [ "$1" = "--profile" ]
-        then
-          echo "before CXXFLAGS = $CXXFLAGS"
-          export CXXFLAGS="$CXXFLAGS -O2 -pg -g -std=c++0x -pedantic -Wall"
-          export LINKFLAGS="$LINKFLAGS -pg "
-          echo "after CXXFLAGS = $CXXFLAGS"
-          shift
-        fi
-      fi
-    fi
-  fi
+
+release="None"
+verbose=0
+
+while getopts "h?cr:" opt; do
+    case "$opt" in
+    h|\?)
+        echo "[-h] Print help messages"
+        echo "[-r] Release version"
+        echo "[-c] Clean repo"
+        exit 0
+        ;;
+    r)  release=$OPTARG
+        ;;
+    c)  CLEAN="TRUE"
+        ;;
+    esac
 done
+
+shift $((OPTIND-1))
+
+[ "$1" = "--" ] && shift
+
+#echo "verbose=$verbose, output_file='$output_file', Leftovers: $@"
+#echo "release=$release, CONFIGURE_FLAGS=$CONFIGURE_FLAGS, CLEAN=$CLEAN, Leftovers: $@"
 
 CWD=`pwd`
 
 export PKG_CONFIG_PATH="${CWD}/usr/local/lib/pkgconfig/"
-export NFD=${CWD}/usr/local/bin/nfd
+#export NFD=${CWD}/usr/local/bin/nfd
 
 for d in $DIRS0 
 do
   pushd $d
-  echo "building $d"
-  if [ $CLEAN = "TRUE" ]
-  then
-    ./waf clean
+  if [ $release != "None" ]; then
+    echo "Checkouting to $DIRS0-$release"
+    git checkout $DIRS0-$release
   fi
-  ./waf $CONFIGURE_FLAGS --prefix ${CWD}/usr/local configure
-  ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local
-  ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local install
+
+  echo "building $d"
+
+  if [ $CLEAN = "TRUE" ]; then
+    ./waf uninstall
+    ./waf clean
+    ./waf distclean
+  else
+    ./waf --prefix ${CWD}/usr/local configure
+    ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local
+    ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local install
+  fi
   popd
 done 
+
 for d in $DIRS1 
 do
   pushd $d
-  echo "building $d"
-  if [ $CLEAN = "TRUE" ]
-  then
-    ./waf clean
+
+  if [ $release != "None" ]; then
+    echo "Checkouting to $DIRS1-$release"
+    git checkout $DIRS1-$release
   fi
-  ./waf --with-tests $CONFIGURE_FLAGS --without-websocket --prefix ${CWD}/usr/local configure
-  ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local
-  ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local install
+
+  echo "building $d"
+  if [ $CLEAN = "TRUE" ]; then
+    ./waf uninstall
+    ./waf clean
+    ./waf distclean
+  else
+    ./waf --without-websocket --prefix ${CWD}/usr/local configure
+    ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local
+    ./waf $BUILD_FLAGS --prefix ${CWD}/usr/local install
+  fi
   popd
 done 
 
 for d in $DIRS2 
 do
   pushd $d
-  echo "building $d"
-  if [ $CLEAN = "TRUE" ]
-  then
-    ./waf clean
+
+  if [ $release != "None" ]; then
+    echo "Checkouting to $DIRS2-$release"
+    git checkout $DIRS2-$release
   fi
-  ./waf --prefix ${CWD}/usr/local configure
-  #./waf --prefix ${CWD}/usr/local configure
-  ./waf --prefix ${CWD}/usr/local
-  ./waf --prefix ${CWD}/usr/local install
+
+  echo "building $d"
+  if [ $CLEAN = "TRUE" ]; then
+    ./waf uninstall
+    ./waf clean
+    ./waf distclean
+  else
+    ./waf --prefix ${CWD}/usr/local configure
+    ./waf --prefix ${CWD}/usr/local
+    ./waf --prefix ${CWD}/usr/local install
+  fi
   popd
 done 
