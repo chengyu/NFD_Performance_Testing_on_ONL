@@ -1,25 +1,15 @@
 #!/bin/bash
 
-if [ $# -eq 6 ]
+if [ $# -eq 5 ]
 then
   COUNT=$1
   PROTO=$2
   INTERVAL=$3
   NUM_COMPONENTS=$4
   COMPONENT_LEN=$5
-  INTEREST_NUM=$6
 else
-  if [ $# -eq 5 ]
-  then
-    COUNT=$1
-    PROTO=$2
-    INTERVAL=$3
-    NUM_COMPONENTS=$4
-    COMPONENT_LEN=$5
-  else
-    echo "Usage: $0 <count> <proto> <interval> <num name components> <component length> [interest num]"
+  echo "Usage: $0 <count> <proto> <interval> <num name components> <component length>"
   exit 0
-  fi
 fi
 
 source ../hosts
@@ -108,8 +98,7 @@ do
   echo "Name=${NAME}${EXT}" >> $FILENAME
   echo "MustBeFresh=1" >> $FILENAME
   echo "NameAppendSequenceNumber=1" >> $FILENAME
-  #echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/client ; ndn-traffic -i \$INTERVAL $FILENAME >& client_$EXT.log &\"  " >> ../runTrafficClients.sh
-  echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/client ; export LD_LIBRARY_PATH='\$CWD/../NFD_current_git/usr/local/lib:\$LD_LIBRARY_PATH\' ; ../../NFD_current_git/usr/local/bin/ndn-traffic -i \$INTERVAL -c $INTEREST_NUM $FILENAME >& client_$EXT.log &\"  " >> ../runTrafficClients.sh
+  echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/client ; ../../NFD_current_git/usr/local/bin/ndn-traffic -i \$INTERVAL $FILENAME >& client_$EXT.log &\"  " >> ../runTrafficClients.sh
 
 
   HOSTINDEX=$(($HOSTINDEX + 1))

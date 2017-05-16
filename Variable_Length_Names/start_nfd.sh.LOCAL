@@ -2,7 +2,7 @@
 
 nfd_ready()
 {
-  FIB_INFO=`nfd-status -b 2> /dev/null`
+  FIB_INFO=`../NFD_current_git/usr/local/bin/nfdc fib list 2> /dev/null`
   if [ $? -eq 0 ]
   then
     RETURN=0
@@ -30,10 +30,9 @@ do
   ready=$(nfd_ready)
   if [  "$ready" = "READY" ]
   then
-    #echo "NFD is ready"
+    echo "NFD is ready"
     exit 0
   else
-    #echo "NFD is NOT ready count = $count"
     count=$(($count+1))
   fi
 

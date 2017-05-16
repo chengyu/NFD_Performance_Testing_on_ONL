@@ -46,11 +46,14 @@ HOSTINDEX=0
 FACE_ID=$START_FACE_ID
 # Add faces for Client Hosts
 #echo "NUM_CLIENT_HOSTS = $NUM_CLIENT_HOSTS"
+
+export LD_LIBRARY_PATH="$CWD/../NFD_current_git/usr/local/lib:$LD_LIBRARY_PATH"
+
 echo "# Client Faces" >> ./configRtr.sh
 while [ $HOSTINDEX -lt $NUM_CLIENT_HOSTS ]
 do
   # create face
-  echo "nfdc create ${PROTO}://${CLIENT_HOST_LIST[$HOSTINDEX]}:6363 # FaceID: $FACE_ID" >> ./configRtr.sh
+  echo "$CWD/../NFD_current_git/usr/local/bin/nfdc create ${PROTO}://${CLIENT_HOST_LIST[$HOSTINDEX]}:6363 # FaceID: $FACE_ID" >> ./configRtr.sh
   HOSTINDEX=$(($HOSTINDEX + 1))
   # Count the Client faces so we can remember where the Server Faces start
   FACE_ID=$(($FACE_ID + 2))
@@ -66,7 +69,7 @@ echo "# Server Faces" >> ./configRtr.sh
 while [ $HOSTINDEX -lt $NUM_SERVER_HOSTS ]
 do
   # create face
-  echo "nfdc create ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 # FaceID: $FACE_ID" >> ./configRtr.sh
+  echo "$CWD/../NFD_current_git/usr/local/bin/nfdc create ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 # FaceID: $FACE_ID" >> ./configRtr.sh
   HOSTINDEX=$(($HOSTINDEX + 1))
   # Record FACE ID so we have the last Server Face
   MAX_FACE_ID=$FACE_ID
@@ -130,7 +133,7 @@ do
   # add next hop
   #echo "nfdc add-nexthop /example/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/$EXT $FACE_ID 1 " >> ./configRtr.sh
   #echo "nfdc add-nexthop -c 1 ${NAME}${EXT} $FACE_ID " >> ./configRtr.sh
-  echo "nfdc add-nexthop -c 1 ${NAME}${EXT} ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 " >> ./configRtr.sh
+  echo  "$CWD/../NFD_current_git/usr/local/bin/nfdc add-nexthop -c 1 ${NAME}${EXT} ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 " >> ./configRtr.sh
   #FACE_ID=$(($FACE_ID + 2))
   # if we have reached the last server first Server 
   HOSTINDEX=$(($HOSTINDEX + 1))

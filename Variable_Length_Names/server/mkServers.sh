@@ -1,14 +1,13 @@
 #!/bin/bash
 
-if [ $# -eq 5 ]
+if [ $# -eq 4 ]
 then
   COUNT=$1
   PROTO=$2
   NUM_COMPONENTS=$3
   COMPONENT_LEN=$4
-  CONTENT_PAYLOAD=$5
 else
-  echo "Usage: $0 <count> <proto> <num name components> <component length> <content payload>"
+  echo "Usage: $0 <count> <proto> <num name components> <component length>"
   exit 0
 fi
 
@@ -85,15 +84,14 @@ do
   #echo "Name=/example/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/$EXT" > $FILENAME
   echo "Name=${NAME}${EXT}" >> $FILENAME
   echo "ContentType=1" >> $FILENAME
-  echo "ContentBytes=${CONTENT_PAYLOAD}" >> $FILENAME
+  echo "ContentBytes=800" >> $FILENAME
   echo "SigningInfo=id:/localhost/identity/digest-sha256" >> $FILENAME
   #echo "ContentBytes=4000" >> $FILENAME
   #echo  "Content=AAAAAAAAAA" >> $FILENAME
 
 
   #echo " ssh \$${HOST_LIST[$HOSTINDEX]}  \"cd \$CWD/server ; ndn-traffic-server -q $FILENAME >& server_$EXT.log &\"  " >> ../runTrafficServers.sh
-  #echo " ssh \$${HOST_LIST[$HOSTINDEX]}  \"cd \$CWD/server ; ndn-traffic-server $FILENAME >& server_$EXT.log &\"  " >> ../runTrafficServers.sh
-  echo " ssh \$${HOST_LIST[$HOSTINDEX]} \"cd \$CWD/server ; export LD_LIBRARY_PATH='\$CWD/../NFD_current_git/usr/local/lib:\$LD_LIBRARY_PATH\' ; ../../NFD_current_git/usr/local/bin/ndn-traffic-server $FILENAME >& server_$EXT.log &\"  " >> ../runTrafficServers.sh
+  echo " ssh \$${HOST_LIST[$HOSTINDEX]}  \"cd \$CWD/server ; ../../NFD_current_git/usr/local/bin/ndn-traffic-server $FILENAME >& server_$EXT.log &\"  " >> ../runTrafficServers.sh
 
   INDEX=$(($INDEX + 1))
   HOSTINDEX=$(($HOSTINDEX + 1))
