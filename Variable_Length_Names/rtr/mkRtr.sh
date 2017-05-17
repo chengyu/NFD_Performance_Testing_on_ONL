@@ -133,7 +133,7 @@ do
   # add next hop
   #echo "nfdc add-nexthop /example/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/$EXT $FACE_ID 1 " >> ./configRtr.sh
   #echo "nfdc add-nexthop -c 1 ${NAME}${EXT} $FACE_ID " >> ./configRtr.sh
-  echo  "$CWD/../NFD_current_git/usr/local/bin/nfdc add-nexthop -c 1 ${NAME}${EXT} ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 " >> ./configRtr.sh
+  echo  "../../NFD_current_git/usr/local/bin/nfdc add-nexthop -c 1 ${NAME}${EXT} ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 " >> ./configRtr.sh
   #FACE_ID=$(($FACE_ID + 2))
   # if we have reached the last server first Server 
   HOSTINDEX=$(($HOSTINDEX + 1))
