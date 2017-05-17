@@ -8,14 +8,14 @@ source hosts
 echo "start nfd on all servers"
 for s in $SERVER_HOSTS 
 do
-  echo 'ssh' ${!s} '"cd' $CWD '; ./start_nfd.sh"' 
+  #echo 'ssh' ${!s} '"cd' $CWD '; ./start_nfd.sh"' 
   ssh ${!s} "cd $CWD ; ./start_nfd.sh" 
 done
 
 echo "start nfd on all clients"
 for s in $CLIENT_HOSTS 
 do
-  echo "ssh" ${!s}
+  #echo "ssh" ${!s}
   ssh ${!s} "cd $CWD ; ./start_nfd.sh" 
 done
 

@@ -53,7 +53,7 @@ echo "# Client Faces" >> ./configRtr.sh
 while [ $HOSTINDEX -lt $NUM_CLIENT_HOSTS ]
 do
   # create face
-  echo "$CWD/../NFD_current_git/usr/local/bin/nfdc create ${PROTO}://${CLIENT_HOST_LIST[$HOSTINDEX]}:6363 # FaceID: $FACE_ID" >> ./configRtr.sh
+  echo "../../NFD_current_git/usr/local/bin/nfdc create -P ${PROTO}://${CLIENT_HOST_LIST[$HOSTINDEX]}:6363 # FaceID: $FACE_ID" >> ./configRtr.sh
   HOSTINDEX=$(($HOSTINDEX + 1))
   # Count the Client faces so we can remember where the Server Faces start
   FACE_ID=$(($FACE_ID + 2))
@@ -69,7 +69,7 @@ echo "# Server Faces" >> ./configRtr.sh
 while [ $HOSTINDEX -lt $NUM_SERVER_HOSTS ]
 do
   # create face
-  echo "$CWD/../NFD_current_git/usr/local/bin/nfdc create ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 # FaceID: $FACE_ID" >> ./configRtr.sh
+  echo "../../NFD_current_git/usr/local/bin/nfdc create -P ${PROTO}://${SERVER_HOST_LIST[$HOSTINDEX]}:6363 # FaceID: $FACE_ID" >> ./configRtr.sh
   HOSTINDEX=$(($HOSTINDEX + 1))
   # Record FACE ID so we have the last Server Face
   MAX_FACE_ID=$FACE_ID

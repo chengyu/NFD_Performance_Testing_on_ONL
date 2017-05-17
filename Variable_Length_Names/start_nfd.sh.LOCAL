@@ -30,7 +30,7 @@ do
   ready=$(nfd_ready)
   if [  "$ready" = "READY" ]
   then
-    echo "NFD is ready"
+    #echo "NFD is ready"
     exit 0
   else
     count=$(($count+1))
