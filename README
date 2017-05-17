@@ -5,6 +5,10 @@ This repo is forked from John's repo. I modified it to support the tests for var
 
 Files for running nfd performance tests on ONL.
 
+TODO:
+1. add support for pkt payload size
+2. add support for profiling using callgrind
+
 5/17/2017: Updated to run with nfd version 0.5.1, need to fix bugs to accept pkt size, etc.
 3/8/2016:  Updated to run with nfd version 0.4.0 and accept pkt size and number of Interests allowed to send on client side
            This new version incorporates the nrd into a thread in the nfd process.
