@@ -5,7 +5,8 @@ This repo is forked from John's repo. I modified it to support the tests for var
 
 Files for running nfd performance tests on ONL.
 
-3/8/2016: Updated to run with nfd version 0.4.0 and accept pkt size and number of Interests allowed to send on client side
+5/17/2017: Updated to run with nfd version 0.5.1, need to fix bugs to accept pkt size, etc.
+3/8/2016:  Updated to run with nfd version 0.4.0 and accept pkt size and number of Interests allowed to send on client side
            This new version incorporates the nrd into a thread in the nfd process.
            So, it is no longer necessary to start a separate nrd process.
 
@@ -34,8 +35,18 @@ ONL_RLI_Files:
                                  the RLI. If you have version 8.0 or later you do
                                  not need these files. If you have 7.x or earlier
                                  you do need them.
-    nfd_16_clients_16_servers_1_rtr : This is the topology file that will be loaded 
-                                      into the RLI for your experiment.
+    HOST8core.shw, PC8core.hw  : These are hardware description files for the pc8core 
+                                 machines used in this topology. The pc8core machines 
+                                 are new to ONL and are only built into new versions of
+                                 the RLI. If you have version 8.0 or later you do
+                                 not need these files. If you have 7.x or earlier
+                                 you do need them.
+    nfd_16_clients_16_servers_1_rtr :
+                                 This is the topology file (2core machines) that
+                                 will be loaded into the RLI for your experiment.
+    nfd_16_clients_16_servers_1_rtr_pc8core_pc1core_hosts :
+                                 This is the topology file (8core and 1core machines)
+                                 that will be loaded into the RLI for your experiment.
 
 Steps:
   0. Need to learn about ONL or get an account: https://onl.wustl.edu/
@@ -103,14 +114,12 @@ Steps:
 
      # To see the mkAll.sh Usage message:
      > ./mkAll.sh
-     Usage: ./mkAll.sh [Interest num] <count> <proto> <interval> <num name segments> <segment length> <content payload size>
-     Interest num: the #Interests that client will send
+     Usage: ./mkAll.sh <count> <proto> <interval> <num name segments> <segment length>
      count: Number of client server pairs
      proto: protocol for the nfd faces
      interval: time in milliseconds between Interests sent from clients.
      num name segments: number of segments in the NDN names used
      segment lengths: number of characters in each name segment.
-     content payload size: the size of the NDN content, in Bytes
      Each name will have a last name segment (000, 001, 002, ...) 
      that identifies the particular server serving that name space.
 
@@ -174,17 +183,17 @@ Building and running a local version of nfd and nrd
 On onlusr:
 
 onlusr> cd ~
-onlusr> git clone http://github.com/WU-ARL/NFD_Performance_Testing_on_ONL
+onlusr> git clone https://github.com/chengyu/NFD_Performance_Testing_on_ONL.git
 onlusr> cd NFD_Performance_Testing_on_ONL/
 onlusr> cd NFD_current_git/
 onlusr> ./git_initial.sh
 
 
-On a pc2core:
+On a pc2core or any other experiment nodes:
 
 pc2core19> cd ~
 pc2core19> cd NFD_Performance_Testing_on_ONL/NFD_current_git/
-pc2core19> ./build_all.sh
+pc2core19> ./build_all.sh -r <released-version>
 
 
 On onlusr:
@@ -192,51 +201,16 @@ onlusr> cd ~
 onlusr> cd NFD_Performance_Testing_on_ONL/Variable_Length_Names/
 
 onlusr>  ./mkAll.sh
-Usage: ./mkAll.sh [options] [Interest num] <count> <proto> <interval> <num name components> <component length> <content payload>
+Usage: ./mkAll.sh [options] <count> <proto> <interval> <num name components> <component length>
 Options:
   [--local]     - use start scripts to run local (../NFD_current_git_optimized/usr/local/bin/) versions of nfd and nrd
   [--installed] - use start scripts to run the installed (based on PATH) versions of nfd and nrd
 
 
-onlusr> ./mkAll.sh --local  64 udp4 8 5 5 100
+onlusr> ./mkAll.sh --local  64 udp4 8 5 5
 onlusr> ./runAll.sh
 
 < run as long as you need, and then:>
 
 onlusr> ./killAll.sh
-
-
-
--------------------------------------------------------------------------
-Building and running a local profiled version of nfd and nrd
-
-Assuming you already have the NFD_Performance_Testing_on_ONL repo
-
-On a pc2core:
-
-pc2core19> cd ~
-pc2core19> cd NFD_Performance_Testing_on_ONL/NFD_current_git/
-pc2core19> ./build_all.sh --profile
-
-On onlusr:
-onlusr> cd ~
-onlusr> cd NFD_Performance_Testing_on_ONL/Variable_Length_Names/
-
-onlusr>  ./mkAll.sh
-Usage: ./mkAll.sh [options] [Interest num] <count> <proto> <interval> <num name components> <component length> <content payload>
-Options:
-  [--local]     - use start scripts to run local (../NFD_current_git_optimized/usr/local/bin/) versions of nfd and nrd
-  [--installed] - use start scripts to run the installed (based on PATH) versions of nfd and nrd
-
-
-onlusr> ./mkAll.sh --local  64 udp4 8 5 5 100
-or ... onlusr> ./mkAll.sh --local  1500 64 udp4 8 5 5 100
-onlusr> ./runAll.sh
-
-< run as long as you need, and then:>
-
-onlusr> ./killAll.sh
-
-onlusr> gprof ../NFD_current_git/usr/local/bin/nfd gmon.out >& gprof.out
-
 
