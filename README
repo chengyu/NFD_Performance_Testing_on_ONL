@@ -215,3 +215,13 @@ onlusr> ./runAll.sh
 
 onlusr> ./killAll.sh
 
+--------------------------------------------------------------------------
+Profiling nfd
+
+We use callgrind for profiling.
+1. Step 1: In startAll.sh, comment the code to start rtr nfd.
+2. Step 2: On the node that is running the central NFD, use callgrind command to run nfd "valgrind --tool=callgrind [callgrind options] your-program [program options]"
+3. Step 3: run mkAll.sh etc. scritps as usual.
+
+TODO:
+1. Make the profiling steps automatic (using one single script)
