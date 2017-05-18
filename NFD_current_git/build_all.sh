@@ -85,11 +85,6 @@ for d in $DIRS2
 do
   pushd $d
 
-  if [ $release != "None" ]; then
-    echo "Checkouting to $DIRS2-$release"
-    git checkout $DIRS2-$release
-  fi
-
   echo "building $d"
   if [ $CLEAN = "TRUE" ]; then
     ./waf uninstall

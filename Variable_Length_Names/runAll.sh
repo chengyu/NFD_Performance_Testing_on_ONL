@@ -1,5 +1,22 @@
 #!/bin/bash
 
+PROFILING="FALSE"
+while getopts "h?P" opt; do
+    case "$opt" in
+    h|\?)
+        echo "[-h] Print help messages"
+        echo "[-P] Profiling mode"
+        exit 0
+        ;;
+    P)  PROFILING="TRUE"
+        ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+[ "$1" = "--" ] && shift
+#echo $LOCAL,$SEGLEN,Leftovers: $@
 
 
 echo "Checking for basic connectivity. This could take a couple minutes..."
@@ -16,12 +33,13 @@ else
 fi
 
 echo "startAll.sh"
-./startAll.sh 
+./startAll.sh $PROFILING
 echo "configAll.sh"
 ./configAll.sh 
 echo "runTrafficServers.sh"
 ./runTrafficServers.sh 
 echo "runTrafficClients.sh"
+
 if [ $# -eq 1 ]
 then
   INTERVAL=$1

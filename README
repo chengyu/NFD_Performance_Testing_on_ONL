@@ -5,10 +5,7 @@ This repo is forked from John's repo. I modified it to support the tests for var
 
 Files for running nfd performance tests on ONL.
 
-TODO:
-1. add support for profiling using callgrind
-
-5/17/2017: Updated to run with nfd version 0.5.1, need to fix bugs to accept pkt size, etc.
+5/17/2017: Updated to run with nfd version 0.5.1, fix bugs to accept pkt size, etc. Allowing to run callgrind for profiling.
 3/8/2016:  Updated to run with nfd version 0.4.0 and accept pkt size and number of Interests allowed to send on client side
            This new version incorporates the nrd into a thread in the nfd process.
            So, it is no longer necessary to start a separate nrd process.
@@ -218,10 +215,13 @@ onlusr> ./killAll.sh
 --------------------------------------------------------------------------
 Profiling nfd
 
-We use callgrind for profiling.
-1. Step 1: In startAll.sh, comment the code to start rtr nfd.
-2. Step 2: On the node that is running the central NFD, use callgrind command to run nfd "valgrind --tool=callgrind [callgrind options] your-program [program options]"
-3. Step 3: run mkAll.sh etc. scritps as usual.
+The scripts support callgrind profiling. The steps are listed as below:
 
-TODO:
-1. Make the profiling steps automatic (using one single script)
+onlusr> ./mkAll.sh -L -c 16 -p udp4 -i 10 -n 5 -l 5 -s 100
+onlusr> ./runAll.sh -P
+
+< run as long as you need, and then:>
+onlusr> ./killAll.sh -P
+
+Then the callgrind should produce the callgrind.out.<pid> file. Users are suggested to use KCachegrind for analysis:
+http://kcachegrind.sourceforge.net/html/Home.html

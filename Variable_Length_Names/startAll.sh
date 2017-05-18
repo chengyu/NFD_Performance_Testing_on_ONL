@@ -20,8 +20,13 @@ do
 done
 
 # Start Rtr
-echo "start nfd on router"
-ssh ${!RTR_HOST} "cd $CWD; ./start_nfd.sh"
+if [ $1 = "FALSE" ]; then
+    echo "start nfd on router"
+    ssh ${!RTR_HOST} "cd $CWD; ./start_nfd.sh"
+else
+    echo "start nfd on router for profiling"
+    ssh ${!RTR_HOST} "cd $CWD; ./start_nfd_callgrind.sh"
+fi
 
 #echo "start nrd on all servers"
 #for s in $SERVER_HOSTS 
