@@ -6,8 +6,7 @@ This repo is forked from John's repo. I modified it to support the tests for var
 Files for running nfd performance tests on ONL.
 
 TODO:
-1. add support for pkt payload size
-2. add support for profiling using callgrind
+1. add support for profiling using callgrind
 
 5/17/2017: Updated to run with nfd version 0.5.1, need to fix bugs to accept pkt size, etc.
 3/8/2016:  Updated to run with nfd version 0.4.0 and accept pkt size and number of Interests allowed to send on client side
@@ -118,7 +117,7 @@ Steps:
 
      # To see the mkAll.sh Usage message:
      > ./mkAll.sh
-     Usage: ./mkAll.sh <count> <proto> <interval> <num name segments> <segment length>
+     Usage: ./mkAll.sh [-L] <-c count> <-p proto> <-i interval> <-n num name segments> <-l segment length> <-s content payload>
      count: Number of client server pairs
      proto: protocol for the nfd faces
      interval: time in milliseconds between Interests sent from clients.
@@ -128,8 +127,8 @@ Steps:
      that identifies the particular server serving that name space.
 
      # configure test with 16 client/server pairs, udp4 faces, 10ms interval between
-     #   interests and NDN names with 4 segments with 5 characters in each segment:
-     > ./mkAll.sh 16 udp4 10 4 5 100
+     #   interests and NDN names with 5 segments with 5 characters in each segment:
+     > ./mkAll.sh -L -c 16 -p udp4 -i 10 -n 5 -l 5 -s 100
      # This will run a test with names like this:
      # /abcde/fghij/klmno/pqrst/000
      # /abcde/fghij/klmno/pqrst/001
@@ -164,7 +163,7 @@ Steps:
       client/server pairs and decrease the interval time.
       For instance, the following configuration pushes nfd 0.1.0 beyond what it
       can keep up with:
-      > ./mkAll.sh 64 udp4 5 4 5 100
+      > /mkAll.sh -c 16 -p udp4 -i 10 -n 5 -l 5 -s 100
 
   14. The directions so far are for running the installed version of nfd. If you need to
       run these tests with a local version of nfd  that you have built, you will need to
@@ -205,13 +204,11 @@ onlusr> cd ~
 onlusr> cd NFD_Performance_Testing_on_ONL/Variable_Length_Names/
 
 onlusr>  ./mkAll.sh
-Usage: ./mkAll.sh [options] <count> <proto> <interval> <num name components> <component length>
-Options:
-  [--local]     - use start scripts to run local (../NFD_current_git_optimized/usr/local/bin/) versions of nfd and nrd
-  [--installed] - use start scripts to run the installed (based on PATH) versions of nfd and nrd
+Usage: ./mkAll.sh [options] <-c count> <-p proto> <-i interval> <-n num name components> <-l component length> <-s content payload size>
+Options: -L to indicate using the local installed nfd
 
 
-onlusr> ./mkAll.sh --local  64 udp4 8 5 5
+onlusr> ./mkAll.sh -L -c 16 -p udp4 -i 10 -n 5 -l 5 -s 100
 onlusr> ./runAll.sh
 
 < run as long as you need, and then:>
