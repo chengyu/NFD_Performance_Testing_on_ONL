@@ -1,13 +1,14 @@
 #!/bin/bash
 
-if [ $# -eq 4 ]
+if [ $# -eq 5 ]
 then
   COUNT=$1
   PROTO=$2
   NUM_COMPONENTS=$3
   COMPONENT_LEN=$4
+  PKT_SIZE=$5
 else
-  echo "Usage: $0 <count> <proto> <num name components> <component length>"
+  echo "Usage: $0 <count> <proto> <num name components> <component length> <content payload>"
   exit 0
 fi
 
@@ -84,7 +85,7 @@ do
   #echo "Name=/example/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/ABCDE/FGHIJ/KLMNO/PQRST/UVWXY/Z/$EXT" > $FILENAME
   echo "Name=${NAME}${EXT}" >> $FILENAME
   echo "ContentType=1" >> $FILENAME
-  echo "ContentBytes=800" >> $FILENAME
+  echo "ContentBytes=$PKT_SIZE" >> $FILENAME
   echo "SigningInfo=id:/localhost/identity/digest-sha256" >> $FILENAME
   #echo "ContentBytes=4000" >> $FILENAME
   #echo  "Content=AAAAAAAAAA" >> $FILENAME
